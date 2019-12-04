@@ -37,6 +37,7 @@
 #include <linux/sched.h>
 #include <linux/cpu_pm.h>
 #include <linux/arm-smccc.h>
+#include <linux/psci.h>
 #include <soc/qcom/spm.h>
 #include <soc/qcom/pm.h>
 #include <soc/qcom/rpm-notifier.h>
@@ -62,6 +63,9 @@
 #define PSCI_AFFINITY_LEVEL(lvl) ((lvl & 0x3) << 24)
 static remote_spinlock_t scm_handoff_lock;
 
+extern unsigned long __invoke_psci_fn_smc(unsigned long function_id,
+			unsigned long arg0, unsigned long arg1,
+			unsigned long arg2);
 enum {
 	MSM_LPM_LVL_DBG_SUSPEND_LIMITS = BIT(0),
 	MSM_LPM_LVL_DBG_IDLE_LIMITS = BIT(1),
