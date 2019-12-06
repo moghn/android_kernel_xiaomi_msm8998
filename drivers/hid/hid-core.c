@@ -194,6 +194,7 @@ static unsigned hid_lookup_collection(struct hid_parser *parser, unsigned type)
 			return collection[index].usage;
 	}
 	return 0; /* we know nothing about this usage type */
+}
 /*
  * Concatenate usage which defines 16 bits or less with the
  * currently defined usage page to form a 32 bit usage
@@ -225,7 +226,7 @@ static int hid_add_usage(struct hid_parser *parser, unsigned usage, u8 size)
 	if (size <= 2)
 		complete_usage(parser, parser->local.usage_index);
 
-	parser->local.usage_size[parser->local.usage_index] = size;
+	parser->local.usage[parser->local.usage_index] = size;
 	parser->local.collection_index[parser->local.usage_index] =
 		parser->collection_stack_ptr ?
 		parser->collection_stack[parser->collection_stack_ptr - 1] : 0;
@@ -557,7 +558,7 @@ static void hid_concatenate_last_usage_page(struct hid_parser *parser)
 	 * has not been already used in previous usages concatenation
 	 */
 	for (i = parser->local.usage_index - 1; i >= 0; i--) {
-		if (parser->local.usage_size[i] > 2)
+		if (parser->local.usage[i] > 2)
 			/* Ignore extended usages */
 			continue;
 
